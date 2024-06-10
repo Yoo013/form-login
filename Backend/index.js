@@ -1,55 +1,47 @@
-require("dotenv").config()
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const ConnectDB = require('./src/configs/db');
+const UserRoutes = require('./src/controllers/user.controller');
+const AuthRoutes = require('./src/controllers/auth.controller');
 
-const express = require('express')
-const app = express()
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-const cors = require("cors")
-
-const PORT = process.env.PORT || 3000
-
-const ConnectDB = require("./src/configs/db")
-
-//importing the routes or controllers  UserController or UserRoutes and AuthController or AuthRoutes
-const UserRoutes = require("./src/controllers/user.controller")
-const AuthRoutes = require("./src/controllers/auth.controller")
-
-
-//middlewares 
-app.use(express.json())
+// Middlewares
+app.use(express.json());
 
 const corsOptions = {
-    origin: 'https://example.com', // Allow only this origin
+    origin: 'https://form-login-49ah.vercel.app', // Allow only this origin
     methods: 'GET,POST', // Allow only GET and POST requests
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow only these headers
-    optionsSuccessStatus: 204 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  };
-  
-  app.use(cors(corsOptions));
-  
-  // Handle preflight requests
-  app.options('*', cors(corsOptions));
+    optionsSuccessStatus: 204 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
+app.use(cors(corsOptions));
 
-app.get("/", (req, resp) => {
-    resp.send("Hello Yousub Here, Home page")
-})
+// Handle preflight requests
+app.options('*', cors(corsOptions));
 
-app.get("/msg", (req, resp) => {
-    resp.send("Welcome to my Api")
-})
+// Routes
+app.get('/', (req, res) => {
+    res.send('Hello Yousub Here, Home page');
+});
 
+app.get('/msg', (req, res) => {
+    res.send('Welcome to my Api');
+});
 
-//routes
-app.use("/api/users", UserRoutes)
-app.use("/api/auth", AuthRoutes)
+app.use('/api/users', UserRoutes);
+app.use('/api/auth', AuthRoutes);
 
-app.listen(PORT, () => {
-    ConnectDB()
-    console.log(`Connected on ${PORT}`)
-})
-
-
-
-
-
-
+// Start server
+app.listen(PORT, async () => {
+    try {
+        await ConnectDB();
+        console.log(`Connected on ${PORT}`);
+    } catch (error) {
+        console.error('Database connection failed:', error);
+        process.exit(1); // Exit process with failure
+    }
+});
