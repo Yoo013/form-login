@@ -15,7 +15,6 @@ const allowedOrigins = ['https://form-login-49ah.vercel.app', 'https://example.c
 
 const corsOptions = {
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
         if (allowedOrigins.indexOf(origin) === -1) {
             const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
@@ -44,6 +43,12 @@ app.get('/msg', (req, res) => {
 
 app.use('/api/users', UserRoutes);
 app.use('/api/auth', AuthRoutes);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 
 // Start server
 app.listen(PORT, async () => {
