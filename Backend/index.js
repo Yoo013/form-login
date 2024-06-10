@@ -8,14 +8,24 @@ const AuthRoutes = require('./src/controllers/auth.controller');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middlewares
+// Middleware
 app.use(express.json());
 
+const allowedOrigins = ['https://form-login-49ah.vercel.app', 'https://example.com'];
+
 const corsOptions = {
-    origin: 'https://form-login-49ah.vercel.app', // Allow only this origin
-    methods: 'GET,POST', // Allow only GET and POST requests
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allow only these headers
-    optionsSuccessStatus: 204 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
+    methods: 'GET,POST',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    optionsSuccessStatus: 204
 };
 
 app.use(cors(corsOptions));
