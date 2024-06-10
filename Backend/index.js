@@ -16,7 +16,18 @@ const AuthRoutes = require("./src/controllers/auth.controller")
 
 //middlewares 
 app.use(express.json())
-app.use(cors())
+
+const corsOptions = {
+    origin: 'https://example.com', // Allow only this origin
+    methods: 'GET,POST', // Allow only GET and POST requests
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allow only these headers
+    optionsSuccessStatus: 204 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  };
+  
+  app.use(cors(corsOptions));
+  
+  // Handle preflight requests
+  app.options('*', cors(corsOptions));
 
 
 app.get("/", (req, resp) => {
