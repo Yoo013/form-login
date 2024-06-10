@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 const allowedOrigins = [
-  'https://form-login-49ah.vercel.app/',
+  'https://form-login-49ah.vercel.app',
   'https://form-login-bice.vercel.app'
 ];
 
