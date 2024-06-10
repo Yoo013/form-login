@@ -11,11 +11,10 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 
-const allowedOrigins = ['https://form-login-49ah.vercel.app', 'https://example.com'];
+const allowedOrigins = ['https://form-login-bice.vercel.app'];
 
 const corsOptions = {
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
         if (allowedOrigins.indexOf(origin) === -1) {
             const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
@@ -45,11 +44,17 @@ app.get('/msg', (req, res) => {
 app.use('/api/users', UserRoutes);
 app.use('/api/auth', AuthRoutes);
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error('Internal Server Error:', err.message);
+    res.status(500).json({ message: 'Internal Server Error', error: err.message });
+});
+
 // Start server
 app.listen(PORT, async () => {
     try {
         await ConnectDB();
-        console.log(`Connected on ${PORT}`);
+        console.log(`Server running on port ${PORT}`);
     } catch (error) {
         console.error('Database connection failed:', error);
         process.exit(1); // Exit process with failure

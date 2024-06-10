@@ -23,21 +23,24 @@ const Signup = () => {
     try {
       const url = "https://form-login-bice.vercel.app/api/users";
       const { data: res } = await axios.post(url, data);
-      navigate("/login");
-
-      // console.log(res.message);
-      // alert(res.message);
-
       toast.success(res.message, {
         position: toast.POSITION.TOP_RIGHT,
       });
+      navigate("/login");
     } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
-        setError(error.response.data.message);
+      console.error("Error during signup:", error); // Log the error
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status <= 500) {
+          setError(error.response.data.message);
+          toast.error(error.response.data.message, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      } else {
+        setError("An unexpected error occurred.");
+        toast.error("An unexpected error occurred.", {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     }
   };
@@ -49,7 +52,7 @@ const Signup = () => {
           <h1>Welcome Back</h1>
           <Link to="/login">
             <button type="button" className={styles.white_btn}>
-              Sing in
+              Sign in
             </button>
           </Link>
         </div>
@@ -96,7 +99,7 @@ const Signup = () => {
             />
             {error && <div className={styles.error_msg}>{error}</div>}
             <button type="submit" className={styles.green_btn}>
-              Sing Up
+              Sign Up
             </button>
           </form>
         </div>
