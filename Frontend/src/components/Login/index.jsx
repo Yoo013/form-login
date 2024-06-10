@@ -15,7 +15,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:3000/api/auth";
+      const url = "https://form-login-bice.vercel.app/api/auth";
       const { data: res } = await axios.post(url, data);
       // console.log("Res", res);
       localStorage.setItem("token", res.data);
