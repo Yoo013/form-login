@@ -16,6 +16,8 @@ app.use(cors({
   allowedHeaders: 'Content-Type,Authorization'
 }));
 
+// Handle preflight requests
+app.options('*', cors(corsOptions));
 
 // Routes
 app.get('/', (req, res) => {
@@ -26,8 +28,8 @@ app.get('/', (req, res) => {
   res.send('Welcome to my Api');
 });
 
-app.post('/api/users', UserRoutes);
-app.post('/api/auth', AuthRoutes);
+app.use('/api/users', UserRoutes);
+app.use('/api/auth', AuthRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
