@@ -26,8 +26,8 @@ app.get('/', (req, res) => {
   res.send('Welcome to my Api');
 });
 
-app.use('/api/users', UserRoutes);
-app.use('/api/auth', AuthRoutes);
+app.post('/api/users', UserRoutes);
+app.post('/api/auth', AuthRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
