@@ -25,7 +25,7 @@ const corsOptions = {
     }
     return callback(null, true);
   },
-  methods: 'GET,POST',
+  methods: ["POST", "GET"],
   allowedHeaders: ['Content-Type', 'Authorization'],
   optionsSuccessStatus: 204
 };
@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
   res.send('Hello Yousub Here, Home page');
 });
 
-app.get('/msg', (req, res) => {
+app.get('/', (req, res) => {
   res.send('Welcome to my Api');
 });
 
