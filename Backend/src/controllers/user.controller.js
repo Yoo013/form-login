@@ -1,38 +1,28 @@
-const express = require("express")
+// src/controllers/user.controller.js
+const express = require('express');
+const router = express.Router();
+const User = require('../models/user'); // Assuming you have a User model
 
-const router = express.Router()
-
-require("dotenv").config()
-
-const bcrypt = require("bcrypt")
-
-
-const { User, ValidateSchema } = require("../models/user.model")
-
-router.post("/", async (req, resp) => {
-    try {
-        const { err } = ValidateSchema(req.body)
-        if (err) {
-            return resp.status(400).send({ message: err.details[0].message })
-        }
-        const user = await User.findOne({ email: req.body.email })
-        if (user) {
-            return resp.status(401).send({ message: "User with given email already exists" })
-        }
-        const salt = await bcrypt.genSalt(Number(process.env.SALT))
-        const hashPassword = await bcrypt.hash(req.body.password, salt)
-
-        await User.create({ ...req.body, password: hashPassword })
-
-        resp.status(201).send(({ message: "Account Created Succeessfully! Thanks or Signup" }))
-
-    }
-    catch (err) {
-        return resp.status(500).send({ Message: err.message })
+// Example user signup route
+router.post('/signup', async (req, res) => {
+  try {
+    const { first_Name, last_Name, email, password } = req.body;
+    
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
     }
 
-})
+    // Create new user
+    const newUser = new User({ first_Name, last_Name, email, password });
+    await newUser.save();
 
-
+    res.status(201).json({ message: 'User created successfully' });
+  } catch (error) {
+    console.error('Error during user signup:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
+  }
+});
 
 module.exports = router;
