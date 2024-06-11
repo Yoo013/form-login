@@ -21,20 +21,25 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "https://form-login-bice.vercel.app/api/users"; // Use your actual backend URL
+      const url = "https://form-login-bice.vercel.app/api/users";
       const { data: res } = await axios.post(url, data);
       navigate("/login");
-  
       toast.success(res.message, {
         position: toast.POSITION.TOP_RIGHT,
       });
     } catch (error) {
-      if (error.response && error.response.status >= 400 && error.response.status <= 500) {
+      console.error("Error during signup:", error);
+      if (
+        error.response &&
+        error.response.status >= 400 &&
+        error.response.status <= 500
+      ) {
         setError(error.response.data.message);
+      } else {
+        setError("An unexpected error occurred.");
       }
     }
   };
-  
 
   return (
     <div className={styles.signup_container}>
