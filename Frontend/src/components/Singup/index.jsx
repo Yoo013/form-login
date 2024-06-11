@@ -21,7 +21,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "https://your-backend-url.vercel.app/api/users"; // Use your actual backend URL
+      const url = "https://form-login-bice.vercel.app//api/users"; // Use your actual backend URL
       const { data: res } = await axios.post(url, data);
       navigate("/login");
   
