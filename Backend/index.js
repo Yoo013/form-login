@@ -2,8 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const ConnectDB = require('./src/configs/db');
-const UserRoutes = require('./src/controllers/user.controller');
-const AuthRoutes = require('./src/controllers/auth.controller');
+const UserRoutes = require('./src/controllers/user.controller.js');
+const AuthRoutes = require('./src/controllers/auth.controller.js');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 const allowedOrigins = [
-  'https://form-login-49ah.vercel.app/signup',
+  'https://form-login-49ah.vercel.app',
   'https://form-login-bice.vercel.app'
 ];
 
